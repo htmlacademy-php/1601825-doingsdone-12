@@ -14,6 +14,41 @@ $show_complete_tasks = rand(0, 1);
 </head>
 
 <body>
+<?php
+    $project = ['Входящие', 'Учеба', 'Работа', 'Домашние дела', 'Авто'];
+    $task_info = [
+        [
+            'task_name'=>'Собеседование в IT компании',
+            'task_date'=>'01.12.2019',
+            'task_type'=>'Работа',
+            'task_full'=>false],
+        [
+            'task_name'=>'Выполнить тестовое задание',
+            'task_date'=>'25.12.2019',
+            'task_type'=>'Работа',
+            'task_full'=>false],
+        [
+            'task_name'=>'Сделать задание первого раздела',
+            'task_date'=>'25.12.2019',
+            'task_type'=>'Учеба',
+            'task_full'=>true],
+        [
+            'task_name'=>'Встреча с другом',
+            'task_date'=>'22.12.2019',
+            'task_type'=>'Входящие',
+            'task_full'=>false],
+        [
+            'task_name'=>'Купить корм для кота',
+            'task_date'=>null,
+            'task_type'=>'Домашние дела',
+            'task_full'=>false],
+        [
+            'task_name'=>'Заказать пиццу',
+            'task_date'=>null,
+            'task_type'=>'Домашние дела',
+            'task_full'=>false]
+    ];
+?>
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
@@ -42,10 +77,12 @@ $show_complete_tasks = rand(0, 1);
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
+                        <?php foreach ($project as $pr_item): ?>
                         <li class="main-navigation__list-item">
-                            <a class="main-navigation__list-item-link" href="#">Название проекта</a>
+                            <a class="main-navigation__list-item-link" href="#"><?=$pr_item; ?></a>
                             <span class="main-navigation__list-item-count">0</span>
                         </li>
+                        <? endforeach; ?>
                     </ul>
                 </nav>
 
@@ -78,33 +115,23 @@ $show_complete_tasks = rand(0, 1);
                 </div>
 
                 <table class="tasks">
-                    <tr class="tasks__item task">
+                    <?php foreach ($task_info as $key => $val): ?>
+                    <?php if (($val['task_full'])&&(!$show_complete_tasks)) continue;?>
+                    <tr class="tasks__item task <?php if($val['task_full']):?>task--completed<?php endif; ?>">
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                                <span class="checkbox__text">Сделать главную страницу Дела в порядке</span>
+                                <span class="checkbox__text"><?=$val['task_name']; ?></span>
                             </label>
                         </td>
-
-                        <td class="task__file">
-                            <a class="download-link" href="#">Home.psd</a>
+                        <td class="task__date">
+                            <?=$val['task_date']; ?>
                         </td>
-
-                        <td class="task__date"></td>
-                    </tr>
-                    <!--показывать следующий тег <tr/>, если переменная $show_complete_tasks равна единице-->
-                    <?php if($show_complete_tasks):?>
-                    <tr class="tasks__item task task--completed">
-                        <td class="task__select">
-                            <label class="checkbox task__checkbox">
-                                <input class="checkbox__input visually-hidden" type="checkbox" checked>
-                                <span class="checkbox__text">Записаться на интенсив "Базовый PHP"</span>
-                            </label>
+                        <td class="task__date">
+                            <?=$val['task_type']; ?>
                         </td>
-                        <td class="task__date">10.10.2019</td>
-                        <td class="task__controls"></td>
                     </tr>
-                    <?php endif; ?>
+                    <? endforeach; ?>
                 </table>
             </main>
         </div>
@@ -172,5 +199,10 @@ $show_complete_tasks = rand(0, 1);
 
 <script src="flatpickr.js"></script>
 <script src="script.js"></script>
+
+
+
+
+
 </body>
 </html>
