@@ -1,7 +1,7 @@
 <?php
 require_once ('helpers.php');
 // показывать или нет выполненные задачи
-$show_complete_tasks = rand(0, 1);
+    $show_complete_tasks = rand(0, 1);
     $project = ['Входящие', 'Учеба', 'Работа', 'Домашние дела', 'Авто'];
     $taskInfo = [
         [
@@ -41,7 +41,19 @@ $show_complete_tasks = rand(0, 1);
             'task_full'=>false]
     ];
 
-    $pageContent = include_template('main.php', ['project' => $project, 'taskInfo' => $taskInfo, 'show_complete_tasks' => $show_complete_tasks]);
+    //Функция для получения разницы в датах и определения просрочки выполнения задачи. Возвращает true либо false
+    function diferDate($date_1, $date_2)
+        {
+            $diffTime = (new DateTime(date('d.m.Y H:i:s', strtotime($date_1))))->diff((new DateTime(date('d.m.Y H:i:s', strtotime($date_2)))))->format("%r%a");
+            // print_r ($diffTime);
+            if ($diffTime <= 1) {
+                return true;
+            } else return false;
+        }
+//Получаем текущую дату
+    $date_1=date('d.m.Y H:i:s');
+
+    $pageContent = include_template('main.php', ['project' => $project, 'taskInfo' => $taskInfo, 'show_complete_tasks' => $show_complete_tasks, 'date_1'=>$date_1]);
     $layoutContent = include_template('layout.php', ['content' => $pageContent, 'title' => "Дела в порядке", 'user_name'=>'Алексей']);
     print ($layoutContent);
 ?>

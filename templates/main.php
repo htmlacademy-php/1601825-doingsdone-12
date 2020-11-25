@@ -1,4 +1,3 @@
-
 <section class="content__side">
     <h2 class="content__side-heading">Проекты</h2>
 
@@ -44,7 +43,7 @@
     <table class="tasks">
         <?php foreach ($taskInfo as $key => $val): ?>
             <?php if (($val['task_full'])&&(!$show_complete_tasks)) continue;?>
-            <tr class="tasks__item task <?php if($val['task_full']):?>task--completed<?php endif; ?>">
+            <tr class="tasks__item task <?php if(diferDate($date_1, $val['task_date'])):?>task--important<?php endif; ?><?php if($val['task_full']):?>task--completed<?php endif; ?>">
                 <td class="task__select">
                     <label class="checkbox task__checkbox">
                         <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1" <?php if($val['task_full']):?>checked<?php endif; ?>>
