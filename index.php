@@ -52,7 +52,6 @@ require_once ('helpers.php');
         }
 //Получаем текущую дату
     $date_1=date('d.m.Y H:i:s');
-
     $pageContent = include_template('main.php', ['project' => $project, 'taskInfo' => $taskInfo, 'show_complete_tasks' => $show_complete_tasks, 'date_1'=>$date_1]);
     $layoutContent = include_template('layout.php', ['content' => $pageContent, 'title' => "Дела в порядке", 'user_name'=>'Алексей']);
     print ($layoutContent);
