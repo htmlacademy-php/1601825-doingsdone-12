@@ -36,7 +36,7 @@ require_once ('helpers.php');
             'task_full'=>false],
         [
             'task_name'=>'Замена колес',
-            'task_date'=>'01.12.2019',
+            'task_date'=>'15.12.2020',
             'task_type'=>'Авто',
             'task_full'=>false]
     ];
