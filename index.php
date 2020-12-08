@@ -2,44 +2,26 @@
 require_once ('helpers.php');
 // показывать или нет выполненные задачи
     $show_complete_tasks = rand(0, 1);
-    $project = ['Входящие', 'Учеба', 'Работа', 'Домашние дела', 'Авто'];
-    $taskInfo = [
-        [
-            'task_name'=>'Собеседование в IT компании',
-            'task_date'=>'01.12.2019',
-            'task_type'=>'Работа',
-            'task_full'=>false],
-        [
-            'task_name'=>'Выполнить тестовое задание',
-            'task_date'=>'25.12.2019',
-            'task_type'=>'Работа',
-            'task_full'=>false],
-        [
-            'task_name'=>'Сделать задание первого раздела',
-            'task_date'=>'25.12.2019',
-            'task_type'=>'Учеба',
-            'task_full'=>true],
-        [
-            'task_name'=>'Встреча с другом',
-            'task_date'=>'22.12.2019',
-            'task_type'=>'Входящие',
-            'task_full'=>false],
-        [
-            'task_name'=>'Купить корм для кота',
-            'task_date'=>null,
-            'task_type'=>'Домашние дела',
-            'task_full'=>false],
-        [
-            'task_name'=>'Заказать пиццу',
-            'task_date'=>null,
-            'task_type'=>'Домашние дела',
-            'task_full'=>false],
-        [
-            'task_name'=>'Замена колес',
-            'task_date'=>'15.12.2020',
-            'task_type'=>'Авто',
-            'task_full'=>false]
-    ];
+    // Устанавливаем id пользователя
+    $userID = 1;
+
+    // Подключаемся к БД
+$con = mysqli_connect("localhost", "root", "root","doingsdone");
+
+    // Создаем запросы к таблицам
+$sql = "SELECT * FROM projects WHERE user_id=$userID";
+$sql2 = "SELECT * FROM tasks WHERE task_autor=(SELECT id FROM users WHERE id=$userID)";
+$sql3 = "SELECT user_name FROM users WHERE id = $userID";
+
+// Отправляем запросы к таблицам
+$resPr = mysqli_query($con, $sql);
+$resTasks = mysqli_query($con, $sql2);
+$resUser = mysqli_query($con, $sql3);
+
+// Преобразуем полученные объекты в массивы
+$project = mysqli_fetch_all($resPr, MYSQLI_ASSOC);
+$taskInfo=mysqli_fetch_all($resTasks, MYSQLI_ASSOC);
+$UserName = (mysqli_fetch_all($resUser, MYSQLI_ASSOC))[0]['user_name'];
 
     //Функция для получения разницы в датах и определения просрочки выполнения задачи. Возвращает true либо false
     function diferDate($date_1, $date_2)
@@ -53,7 +35,7 @@ require_once ('helpers.php');
 //Получаем текущую дату
     $date_1=date('d.m.Y H:i:s');
     $pageContent = include_template('main.php', ['project' => $project, 'taskInfo' => $taskInfo, 'show_complete_tasks' => $show_complete_tasks, 'date_1'=>$date_1]);
-    $layoutContent = include_template('layout.php', ['content' => $pageContent, 'title' => "Дела в порядке", 'user_name'=>'Алексей']);
+    $layoutContent = include_template('layout.php', ['content' => $pageContent, 'title' => "Дела в порядке", 'Uname'=>$UserName]);
     print ($layoutContent);
 ?>
 

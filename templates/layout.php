@@ -24,7 +24,7 @@
 
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__data">
-                        <p><?= $user_name;?>></p>
+                        <p><?=htmlspecialchars($Uname); ?></p>
 
                         <a href="#">Выйти</a>
                     </div>
@@ -32,7 +32,7 @@
             </div>
         </header>
 
-        <div class="content"><?=$content;?> </div>
+        <div class="content"><?=$content; ?> </div>
     </div>
 </div>
 
