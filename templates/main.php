@@ -5,8 +5,10 @@
         <ul class="main-navigation__list">
             <?php foreach ($project as $pr_item): ?>
                 <li class="main-navigation__list-item">
-                    <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($pr_item); ?></a>
-                    <span class="main-navigation__list-item-count"><?php echo array_count_values(array_column($taskInfo, 'task_type'))[$pr_item]; ?></span>
+                    <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($pr_item['project_name']); ?></a>
+                    <span class="main-navigation__list-item-count"><?php
+                        $count=array_count_values(array_column($taskInfo, 'task_project'))[$pr_item['id']];
+            echo (!$count)? 0 : $count; ?></span>
                 </li>
             <? endforeach; ?>
         </ul>
@@ -38,23 +40,27 @@
             <input class="checkbox__input visually-hidden show_completed" type="checkbox" <?php if($show_complete_tasks):?>checked<?php endif; ?>>
             <span class="checkbox__text">Показывать выполненные</span>
         </label>
+
     </div>
 
     <table class="tasks">
         <?php foreach ($taskInfo as $key => $val): ?>
-            <?php if (($val['task_full'])&&(!$show_complete_tasks)) continue;?>
-            <tr class="tasks__item task <?php if(diferDate($date_1, $val['task_date'])):?>task--important<?php endif; ?><?php if($val['task_full']):?>task--completed<?php endif; ?>">
+            <?php if (($val['task_status'])&&(!$show_complete_tasks)) continue;?>
+            <tr class="tasks__item task <?php if((diferDate($date_1, $val['task_date_end']))&&(!$val['task_status'])):?>task--important<?php endif; ?><?php if($val['task_status']):?>task--completed<?php endif; ?>">
                 <td class="task__select">
                     <label class="checkbox task__checkbox">
-                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1" <?php if($val['task_full']):?>checked<?php endif; ?>>
+                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1" <?php if($val['task_status']):?>checked<?php endif; ?>>
                         <span class="checkbox__text"><?=htmlspecialchars($val['task_name']); ?></span>
                     </label>
                 </td>
                 <td class="task__date">
-                    <?=$val['task_date']; ?>
+                    <?=$val['task_date_end']; ?>
                 </td>
                 <td class="task__date">
-                    <?=$val['task_type']; ?>
+                    <?php foreach ($project as $pr_item): ?>
+                    <?php if ($pr_item['id']!=$val['task_project']) continue;?>
+                    <?=$pr_item['project_name']; ?>
+                    <? endforeach; ?>
                 </td>
             </tr>
         <? endforeach; ?>
