@@ -1,9 +1,10 @@
 <?php
 require_once ('helpers.php');
+
 // показывать или нет выполненные задачи
     $show_complete_tasks = rand(0, 1);
     // Устанавливаем id пользователя
-    $userID = 1;
+    $userID = 2;
 
     // Подключаемся к БД
 $con = mysqli_connect("localhost", "root", "root","doingsdone");
@@ -23,6 +24,15 @@ $project = mysqli_fetch_all($resPr, MYSQLI_ASSOC);
 $taskInfo=mysqli_fetch_all($resTasks, MYSQLI_ASSOC);
 $UserName = (mysqli_fetch_all($resUser, MYSQLI_ASSOC))[0]['user_name'];
 
+$TaskFiltr = $_GET['type'] ?? '';
+$ProjectID = $_GET['taskF'] ?? '';
+
+if ((! in_array($ProjectID,array_column($project, 'id')))&&($ProjectID!='')){
+   header('HTTP/1.1 404 Not Found');
+   header('Status: 404 Not Found');
+   exit ();
+}
+
     //Функция для получения разницы в датах и определения просрочки выполнения задачи. Возвращает true либо false
     function diferDate($date_1, $date_2)
         {
@@ -34,7 +44,7 @@ $UserName = (mysqli_fetch_all($resUser, MYSQLI_ASSOC))[0]['user_name'];
         }
 //Получаем текущую дату
     $date_1=date('d.m.Y H:i:s');
-    $pageContent = include_template('main.php', ['project' => $project, 'taskInfo' => $taskInfo, 'show_complete_tasks' => $show_complete_tasks, 'date_1'=>$date_1]);
+    $pageContent = include_template('main.php', ['ProjectID'=>$ProjectID,'TaskFiltr'=>$TaskFiltr, 'project' => $project, 'taskInfo' => $taskInfo, 'show_complete_tasks' => $show_complete_tasks, 'date_1'=>$date_1]);
     $layoutContent = include_template('layout.php', ['content' => $pageContent, 'title' => "Дела в порядке", 'Uname'=>$UserName]);
     print ($layoutContent);
 ?>

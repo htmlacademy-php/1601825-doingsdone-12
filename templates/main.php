@@ -5,7 +5,7 @@
         <ul class="main-navigation__list">
             <?php foreach ($project as $pr_item): ?>
                 <li class="main-navigation__list-item">
-                    <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($pr_item['project_name']); ?></a>
+                    <a class="main-navigation__list-item-link <?php if ($ProjectID==$pr_item['id']): ?> main-navigation__list-item--active<?php endif;?>" href="/?taskF=<?=($pr_item['id']); ?>"><?=htmlspecialchars($pr_item['project_name']); ?></a>
                     <span class="main-navigation__list-item-count"><?php
                         $count=array_count_values(array_column($taskInfo, 'task_project'))[$pr_item['id']];
             echo (!$count)? 0 : $count; ?></span>
@@ -29,10 +29,10 @@
 
     <div class="tasks-controls">
         <nav class="tasks-switch">
-            <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-            <a href="/" class="tasks-switch__item">Повестка дня</a>
-            <a href="/" class="tasks-switch__item">Завтра</a>
-            <a href="/" class="tasks-switch__item">Просроченные</a>
+            <a href="/" class="tasks-switch__item <?php if($TaskFiltr == ''):?>tasks-switch__item--active<?php endif;?>">Все задачи</a>
+            <a href="/?type=2" class="tasks-switch__item <?php if($TaskFiltr == 2):?>tasks-switch__item--active<?php endif;?>">Повестка дня</a>
+            <a href="/?type=3" class="tasks-switch__item <?php if($TaskFiltr == 3):?>tasks-switch__item--active<?php endif;?>">Завтра</a>
+            <a href="/?type=4" class="tasks-switch__item <?php if($TaskFiltr == 4):?>tasks-switch__item--active<?php endif;?>">Просроченные</a>
         </nav>
 
         <label class="checkbox">
@@ -45,6 +45,7 @@
 
     <table class="tasks">
         <?php foreach ($taskInfo as $key => $val): ?>
+            <?php if((($val['task_project'])!=$ProjectID) and ($ProjectID != '')) continue; ?>
             <?php if (($val['task_status'])&&(!$show_complete_tasks)) continue;?>
             <tr class="tasks__item task <?php if((diferDate($date_1, $val['task_date_end']))&&(!$val['task_status'])):?>task--important<?php endif; ?><?php if($val['task_status']):?>task--completed<?php endif; ?>">
                 <td class="task__select">
